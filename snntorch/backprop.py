@@ -151,8 +151,8 @@ def TBPTT(
     loss_trunc = 0  # reset every K time steps
     loss_avg = 0
 
-    mem_rec = []
-    spk_rec = []
+    #mem_rec = []
+    #spk_rec = []
     mem_rec_trunc = []
     spk_rec_trunc = []
 
@@ -197,8 +197,8 @@ def TBPTT(
 
             step_trunc += 1
             if step_trunc == K:
-                spk_rec += spk_rec_trunc
-                mem_rec += mem_rec_trunc
+                #spk_rec += spk_rec_trunc
+                #mem_rec += mem_rec_trunc
 
                 spk_rec_trunc = torch.stack(spk_rec_trunc, dim=0)
                 mem_rec_trunc = torch.stack(mem_rec_trunc, dim=0)
@@ -250,8 +250,8 @@ def TBPTT(
                 mem_rec_trunc = []
 
         if (step == num_steps - 1) and (num_steps % K):
-            spk_rec += spk_rec_trunc
-            mem_rec += mem_rec_trunc
+            #spk_rec += spk_rec_trunc
+            #mem_rec += mem_rec_trunc
 
             spk_rec_trunc = torch.stack(spk_rec_trunc, dim=0)
             mem_rec_trunc = torch.stack(mem_rec_trunc, dim=0)
@@ -296,7 +296,8 @@ def TBPTT(
                 if neuron:
                     neurons_dict[neuron].detach_hidden()
 
-    return loss_avg, spk_rec, mem_rec
+    #return loss_avg, spk_rec, mem_rec
+    return loss_avg
 
 
 def BPTT(
