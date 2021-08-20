@@ -183,7 +183,6 @@ def _layer_reset():
     if is_synaptic:
         snn.Synaptic.reset_hidden()  # reset hidden state to 0's
         snn.Synaptic.detach_hidden()
-        print("Reset done for Synaptic")
     if is_leaky:
         snn.Leaky.reset_hidden()  # reset hidden state to 0's
         snn.Leaky.detach_hidden()
