@@ -1,7 +1,7 @@
 # Note: need NumPy 1.17 or later for RNG functions
 import numpy as np
 import snntorch as snn
-
+import torch.nn as nn
 
 def data_subset(dataset, subset, idx=0):
     """Partition the dataset by a factor of ``1/subset`` without removing access to data and target attributes.
