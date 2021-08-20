@@ -151,6 +151,13 @@ def reset(net):
 
     _layer_reset()
 
+def _check_layer_exists(net, instance):
+    for layer in net._modules.values():
+        if isinstance(layer, instance):
+            return True
+        if isinstance(layer, nn.ModuleList) or isinstance(layer, nn.Sequential):
+            return _check_layer_exists(layer, instance)
+    return False
 
 def _layer_check(net):
     """Check for the types of LIF neurons contained in net."""
@@ -161,18 +168,11 @@ def _layer_check(net):
     global is_stein
     global is_alpha
 
-    for idx in range(len(list(net._modules.values()))):
-        if isinstance(list(net._modules.values())[idx], snn.Lapicque):
-            is_lapicque = True
-        if isinstance(list(net._modules.values())[idx], snn.Synaptic):
-            is_synaptic = True
-        if isinstance(list(net._modules.values())[idx], snn.Leaky):
-            is_leaky = True
-        if isinstance(list(net._modules.values())[idx], snn.Stein):
-            is_stein = True
-        if isinstance(list(net._modules.values())[idx], snn.Alpha):
-            is_alpha = True
-
+    is_lapicque = _check_layer_exists(net, snn.Lapicque)
+    is_leaky = _check_layer_exists(net, snn.Leaky)
+    is_synaptic = _check_layer_exists(net, snn.Synaptic)
+    is_stein = _check_layer_exists(net, snn.Stein)
+    is_alpha = _check_layer_exists(net, snn.Alpha)
 
 def _layer_reset():
     """Reset hidden parameters to zero and detach them from the current computation graph."""
@@ -183,6 +183,7 @@ def _layer_reset():
     if is_synaptic:
         snn.Synaptic.reset_hidden()  # reset hidden state to 0's
         snn.Synaptic.detach_hidden()
+        print("Reset done for Synaptic")
     if is_leaky:
         snn.Leaky.reset_hidden()  # reset hidden state to 0's
         snn.Leaky.detach_hidden()
